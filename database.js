@@ -9,12 +9,16 @@ let db = new sqlite3.Database('hk_complete.db', (err) => {
 });
 
 // create table 'project'
-var sql='CREATE TABLE project (project_id INT NOT NULL UNIQUE, name TEXT, startdate DATE)';
+var sql='CREATE TABLE project (project_id INT NOT NULL UNIQUE, name TEXT, startdate DATE, users ARRAY[int])';
 db.run(sql, (err) => {
   if (err) {
     console.log('Project Table already created.');
   }else{
     console.log('Project Table created.');
+    var insert = 'INSERT INTO project (project_id, name, startdate, users) Values(?, ?, ?, ?)';
+    db.run(insert, [00001, "Project 1", '2020-12-10', [00001, 00002]])
+    db.run(insert, [00002, "Project 2", '2020-11-09', [00001, 00002]])
+    db.run(insert, [00003, "Project 3", '2020-10-08', [00001, 00002, 00003]])
   }
 });
 

@@ -49,6 +49,34 @@ app.post("/users/login/", (req, res) => {
     });
 });
 
+//get projects for id
+app.post("/userproject/", (req, res, next) => {
+    var errors = []
+    var data = {
+        id: req.body.user_id
+    }
+    if (errors.length) {
+        res.status(400).json({ "error": errors.join(",") });
+        return;
+    }
+    sql = 'SELECT * FROM project WHERE project_id = ?';
+    params = [data.id]
+    db.get(sql, params, (err, result) => {
+        if(err) {
+            res.status(400).json({ "error": err.message })
+            return;
+        }
+        return result
+        ? res.json({
+            "message": "success",
+            "data": result
+        })
+        : res.json({
+            "message": "invalid"
+        })
+    });
+});
+
 // Create a new project
 app.post("/projects/", (req, res, next) => {
     var errors = []
