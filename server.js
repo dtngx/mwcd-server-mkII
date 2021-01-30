@@ -43,7 +43,7 @@ app.post("/users/login/", (req, res) => {
                 "user_id": row.user_id
             })
             : res.json({
-                "message": "incorrect username/password"
+                "message": "invalid"
             })
 
     });
