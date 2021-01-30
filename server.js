@@ -78,26 +78,20 @@ app.post("/userproject/", (req, res, next) => {
 });
 
 // Create a new project
-app.post("/projects/", (req, res, next) => {
-    var errors = []
-    var data = {
-        id: req.body.project_id,
-        name: req.body.name,
-        startdate: req.body.startdate
-    }
-    if (!data.name || !data.id || !data.startdate) {
-        errors.push("Project ID, Name or Startdate for project not specified");
-    }
-    if (errors.length) {
-        res.status(400).json({ "error": errors.join(",") });
-        return;
-    }
 
-    sql = 'INSERT INTO project (project_id, name, startdate) VALUES (?, ?, ?)';
-    var params = [data.project_id, data.name, data.startdate]
+//MISSING ERROR CHECK
+app.post("/projects/", (req, res, next) => {
+    var data = {
+        project_id: req.body.project_id,
+        name: req.body.name,
+        startdate: req.body.startdate,
+        projectteam: req.body.projectteam
+    }
+    sql = 'INSERT INTO project (project_id, name, startdate, projectteam) VALUES (?, ?, ?, ?)';
+    var params = [data.project_id, data.name, data.startdate, data.projectteam]
     db.run(sql, params, function (err, result) {
         if (err) {
-            res.status(400).json({ "error": err.message })
+            res.status(402).json({ "error": err.message })
             return;
         }
         res.json({
@@ -108,7 +102,26 @@ app.post("/projects/", (req, res, next) => {
 });
 
 //create new user
-
+app.post("/users/", (req, res, next) => {
+    var data = {
+        user_id: req.body.user_id,
+        username: req.body.username,
+        password: req.body.password,
+        usertype: req.body.usertype
+    }
+    sql = 'INSERT INTO user (user_id, username, password, usertype) VALUES (?, ?, ?, ?)';
+    var params = [data.user_id, data.username, data.password, data.usertype]
+    db.run(sql, params, function (err, result) {
+        if (err) {
+            res.status(402).json({ "error": err.message })
+            return;
+        }
+        res.json({
+            "message": "success",
+            "data": data
+        })
+    });
+});
 //create new knowledge
 
 // Default response
