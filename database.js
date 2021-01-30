@@ -28,9 +28,9 @@ db.run(sql, (err) => {
       //creating default users
       console.log('User Table created.');
       var insert = 'INSERT INTO user (user_id, username, password, usertype) VALUES(?, ?, ?, ?)';
-      db.run(insert, [00001, "manager", "manager", "manager"])
-      db.run(insert, [00002, "client", "client", "client"])
-      db.run(insert, [00003, "employee", "employee", "employee"])
+      db.run(insert, [00001, "manager", "manager", "Manager"])
+      db.run(insert, [00002, "client", "client", "Client"])
+      db.run(insert, [00003, "employee", "employee", "Employee"])
     }
 });
 
