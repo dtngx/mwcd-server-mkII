@@ -8,17 +8,33 @@ let db = new sqlite3.Database('hk_complete.db', (err) => {
   console.log('Connected to the H+K database.');
 });
 
+//create table for teammembers
+var sql = 'CREATE TABLE tm (team_id TEXT, memberid TEXT)'
+db.run(sql, (err) => {
+  if (err) {
+    console.log('Teammember Table already created');
+  } else {
+    console.log('Teammember Table created');
+    var insert = 'INSERT INTO tm (team_id, memberid) VALUES (?, ?)';
+    db.run(insert, ["1", "1"])
+    db.run(insert, ["1", "2"])
+    db.run(insert, ["2", "1"])
+    db.run(insert, ["1", "3"])
+    db.run(insert, ["2", "3"])
+  }
+})
+
 // create table 'project'
-var sql='CREATE TABLE project (project_id TEXT, name TEXT, startdate DATE, projectteam TEXT)';
+sql='CREATE TABLE project (project_id TEXT, name TEXT, startdate DATE)';
 db.run(sql, (err) => {
   if (err) {
     console.log('Project Table already created.');
   }else{
     console.log('Project Table created.');
-    var insert = 'INSERT INTO project (project_id, name, startdate, projectteam) VALUES (?, ?, ?, ?)';
-    db.run(insert, ["1", "Project 1", '2020-12-10', "1"])
-    db.run(insert, ["2", "Project 2", '2020-12-10', "2"])
-    db.run(insert, ["3", "Project 1", '2020-12-10', "1"])
+    insert = 'INSERT INTO project (project_id, name, startdate) VALUES (?, ?, ?)';
+    db.run(insert, ["1", "Project 1", '2020-12-10'])
+    db.run(insert, ["2", "Project 2", '2020-12-10'])
+    db.run(insert, ["3", "Project 1", '2020-12-10'])
   }
 });
 

@@ -53,14 +53,14 @@ app.post("/users/login/", (req, res) => {
 app.post("/userproject/", (req, res, next) => {
     var errors = []
     var data = {
-        id: req.body.user_id
+        id: req.body.team_id
     }
     if (errors.length) {
         res.status(400).json({ "error": errors.join(",") });
         return;
     }
     sql = 'SELECT * FROM project WHERE project_id = ?';
-    params = [data.id]
+    params = [parseInt(data.id)]
     db.get(sql, params, (err, result) => {
         if(err) {
             res.status(400).json({ "error": err.message })
@@ -85,10 +85,11 @@ app.post("/projects/", (req, res, next) => {
         project_id: req.body.project_id,
         name: req.body.name,
         startdate: req.body.startdate,
-        projectteam: req.body.projectteam
+        projectteam: req.body.projectteam,
+        user_id: req.body.user_id
     }
-    sql = 'INSERT INTO project (project_id, name, startdate, projectteam) VALUES (?, ?, ?, ?)';
-    var params = [data.project_id, data.name, data.startdate, data.projectteam]
+    sql = 'INSERT INTO project (project_id, name, startdate) VALUES (?, ?, ?)';
+    var params = [data.project_id, data.name, data.startdate]
     db.run(sql, params, function (err, result) {
         if (err) {
             res.status(402).json({ "error": err.message })
@@ -100,6 +101,31 @@ app.post("/projects/", (req, res, next) => {
         })
     });
 });
+
+app.post("/teammember/", (req, res, next) => {
+    var data = {
+        project_id: req.body.project_id,
+        name: req.body.name,
+        startdate: req.body.startdate,
+        projectteam: req.body.projectteam,
+        user_id: req.body.user_id
+    }
+    
+sql = 'INSERT INTO tm (team_id, memberid) VALUES (?, ?)';
+params = [data.projectteam.toString(), data.user_id.toString()]
+db.run(sql, params, function (err, result) {
+    if (err) {
+        res.status(403).json({"error": err.message})
+        return;
+    }
+    res.json({
+        "message": "success",
+        "data": data
+    })
+})
+});
+
+   
 
 //create new user
 app.post("/users/", (req, res, next) => {
@@ -124,19 +150,10 @@ app.post("/users/", (req, res, next) => {
 });
 //create new knowledge
 
-// Default response
-app.use(function (req, res) {
-    res.status(404);
-});
-
-
-/*
-
-
-// list all projects DANGER
-app.get("/projects", (req, res, next) => {
-    var sql = `SELECT * FROM project`;
-    var params = []
+// get teammembership
+app.post("/tms/", (req, res, next) => {
+    let sql = 'SELECT team_id FROM tm WHERE memberid = ?';
+    params = [req.body.user_id]
     db.all(sql, params, (err, rows) => {
         if (err) {
             res.status(400).json({ "error": err.message });
@@ -148,6 +165,19 @@ app.get("/projects", (req, res, next) => {
         })
     });
 });
+
+// Default response
+app.use(function (req, res) {
+    res.status(404);
+});
+
+
+
+
+
+
+
+/*
 // list all users DANGER
 app.get("/users", (req, res, next) => {
     sql = `SELECT * FROM user`;
