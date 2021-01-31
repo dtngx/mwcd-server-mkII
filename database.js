@@ -34,7 +34,7 @@ db.run(sql, (err) => {
     insert = 'INSERT INTO project (project_id, name, startdate) VALUES (?, ?, ?)';
     db.run(insert, ["1", "Project 1", '2020-12-10'])
     db.run(insert, ["2", "Project 2", '2020-12-10'])
-    db.run(insert, ["3", "Project 1", '2020-12-10'])
+    db.run(insert, ["3", "Project 3", '2020-12-10'])
   }
 });
 

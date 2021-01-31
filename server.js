@@ -78,8 +78,6 @@ app.post("/userproject/", (req, res, next) => {
 });
 
 // Create a new project
-
-//MISSING ERROR CHECK
 app.post("/projects/", (req, res, next) => {
     var data = {
         project_id: req.body.project_id,
